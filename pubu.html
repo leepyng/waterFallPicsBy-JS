@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> 瀑布流图片布局  </title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        .pics .box{
+            width:180px;
+
+            float:left;
+            padding:10px;
+        }
+        .pics .box img{
+            width:100%;
+            border:1px solid #ccc;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="pics" id="pics">
+        <div class="box">
+            <img src="img/pic_1.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_2.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_6.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_3.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_4.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_5.jpg"/>
+        </div>
+
+        <div class="box">
+            <img src="img/pic_7.png"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_8.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_3.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_4.jpg"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_5.jpg"/>
+        </div>
+
+        <div class="box">
+            <img src="img/pic_7.png"/>
+        </div>
+        <div class="box">
+            <img src="img/pic_8.jpg"/>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    window.onload=function(){
+        waterFall('pics','box');
+    }
+
+    function waterFall(parent,box){
+        var oParent=document.getElementById(parent);
+        var oBoxs=getByClass(oParent,box);
+
+        var oBoxW=oBoxs[0].offsetWidth;
+        var cols=Math.floor(document.documentElement.clientWidth/oBoxW);
+
+        oParent.style.css='width:'+oBoxW*cols+'px;margin:0 auto';
+        var hArr=[];
+        for(var i=0;i<oBoxs.length;i++){
+            if(i<cols){
+                hArr.push(oBoxs[i].offsetHeight);
+            }else{
+                var minH=Math.min.apply(null,hArr);
+                var index=getMinhIndex(hArr,minH);
+                oBoxs[i].style.position='absolute';
+                oBoxs[i].style.top=minH+'px';
+                oBoxs[i].style.left=oBoxW*index+"px";
+                hArr[index]+=oBoxs[i].offsetHeight;
+            }
+        }
+        console.log(hArr)
+    }
+    function getByClass(parent,clsName){
+        var boxArr=new Array();
+        var oElements=parent.getElementsByTagName('*');
+        for(var i=0;i<oElements.length;i++){
+            if(oElements[i].className==clsName){
+                boxArr.push(oElements[i]);
+            }
+        }
+        return boxArr;
+    }
+    function getMinhIndex(arr,val){
+        for(var i in arr){
+            if(arr[i]==val){
+                return i;
+            }
+        }
+    }
+</script>
+</body>
+</html>
